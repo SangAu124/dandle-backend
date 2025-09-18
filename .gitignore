@@ -205,3 +205,101 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# =========================
+# Project Specific - Dandle
+# =========================
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+dandle_dev.db
+dandle_test.db
+dandle_prod.db
+
+# Environment files (keep .env.example)
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+
+# FastAPI/Uvicorn specific
+*.pid
+*.sock
+
+# Alembic migration temp files
+alembic/versions/__pycache__/
+migrations/versions/__pycache__/
+
+# AWS/S3 credentials
+aws-credentials.json
+.aws/
+
+# Redis dump files
+dump.rdb
+
+# Celery beat schedule
+celerybeat-schedule.db
+
+# Temporary upload files
+uploads/temp/
+temp_uploads/
+
+# Claude Code specific
+.claude/temp/
+.claude/cache/
+
+# Photo processing cache
+photo_cache/
+thumbnails_cache/
+
+# Face recognition models/cache
+face_models/
+recognition_cache/
+
+# ML models and data
+models/
+*.pkl
+*.model
+*.weights
+
+# Log files specific to app
+app.log
+uvicorn.log
+worker.log
+face_recognition.log
+
+# Backup files
+*.backup
+*.bak
+backup/
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE specific (expanded)
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Test artifacts
+test_output/
+test_results/
+screenshots/
+test_uploads/
+
+# Performance monitoring
+profiling/
+*.prof
