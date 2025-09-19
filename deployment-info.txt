@@ -1,0 +1,15 @@
+Dandle Backend Deployment Information
+====================================
+Instance ID: i-005c9caaad307711a
+Public IP: 43.200.191.29
+Key Pair: dandle-backend-key.pem
+Security Group: sg-05ebf009ca352cc97 (dandle-backend-sg)
+Region: ap-northeast-2
+SSH Command: ssh -i dandle-backend-key.pem ec2-user@43.200.191.29
+API URL: http://43.200.191.29:8000
+API Docs: http://43.200.191.29:8000/docs
+Database Password: 3oHe04Pns6N8ayjb2YcyA7zQxEhIxDixveJyJ65xhYM=
+JWT Secret: 40di2sg2AQa6MoT0LcnuiPf+r/Cg5Ys+Zx9AtZPnlq/iOSicGVXGXW63MRfBM1jU
+3SZomGRcRLFTXxJN3fimUw==
+
+Deployment Date: Fri Sep 19 16:44:23 KST 2025

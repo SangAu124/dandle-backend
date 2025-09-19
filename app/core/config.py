@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     smtp_password: Optional[str] = None
 
     # CORS 설정
-    cors_origins: list = ["http://localhost:3000", "http://localhost:8080"]  # 개발환경용, 운영환경에서는 실제 도메인으로 설정
+    cors_origins: str = "http://localhost:3000,http://localhost:8080"  # 개발환경용, 운영환경에서는 실제 도메인으로 설정
 
     # 파일 업로드 설정
     max_file_size: int = 50 * 1024 * 1024  # 50MB
