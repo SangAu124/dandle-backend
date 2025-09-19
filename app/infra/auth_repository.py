@@ -226,9 +226,38 @@ class AuthRepository:
         session_ids = await self.redis_client.smembers(user_sessions_key)
 
         if session_ids:
+            # 먼저 모든 세션 데이터를 조회하여 토큰 정보 수집
             pipe = self.redis_client.pipeline()
 
+            # 모든 세션 데이터를 한 번에 조회
             for session_id in session_ids:
+                session_key = f"session:user:{user_id}:{session_id}"
+                pipe.get(session_key)
+
+            session_data_list = await pipe.execute()
+
+            # 새로운 파이프라인으로 모든 관련 데이터 삭제
+            pipe = self.redis_client.pipeline()
+
+            # 세션 데이터와 관련 토큰 매핑 삭제
+            for i, session_data in enumerate(session_data_list):
+                if session_data:
+                    try:
+                        session_info = json.loads(session_data)
+                        access_token = session_info.get("access_token")
+                        refresh_token = session_info.get("refresh_token")
+
+                        # 토큰 매핑 삭제
+                        if access_token:
+                            pipe.delete(f"token:{access_token}")
+                        if refresh_token:
+                            pipe.delete(f"refresh_token:{refresh_token}")
+                    except (json.JSONDecodeError, KeyError):
+                        # 잘못된 세션 데이터는 무시하고 계속 진행
+                        pass
+
+                # 세션 데이터 삭제
+                session_id = list(session_ids)[i]
                 session_key = f"session:user:{user_id}:{session_id}"
                 pipe.delete(session_key)
 
