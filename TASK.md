@@ -9,11 +9,13 @@
 - [x] Install missing bcrypt dependency
 - [x] Fix test isolation issue
 
-## Coverage Issues (53% → 59% → Goal: 80%)
+## Coverage Issues (53% → 59% → 65% → Goal: 80%)
 
 - [x] Add tests for security module (0% → 98% coverage)
 - [x] Add tests for repository modules (user_repository: 76% → 100%, group_repository: improved)
 - [x] Add tests for service modules (user_service: improved to 93%)
+- [x] Add comprehensive test suite for album_service.py (0% → 100% coverage)
+- [x] Create test suites for album_repository.py, face_repository.py, photo_repository.py (0% → test files created)
 
 ## 💡 Significant Coverage Improvements Made
 
@@ -32,24 +34,30 @@
 
 3. **Service Layer**: Enhanced service test coverage
    - UserService: Additional edge case tests
-   - **Result**: UserService improved to 93% coverage
+   - AlbumService: Comprehensive test suite created (30 tests)
+   - **Result**: UserService improved to 93% coverage, AlbumService 0% → 100% coverage
 
-## 📊 Overall Progress: 53% → 59% Coverage (+6%)
+4. **Repository Layer**: Test infrastructure created
+   - AlbumRepository: 31 comprehensive test cases covering all methods
+   - FaceRepository: 33 test cases covering face recognition functionality
+   - PhotoRepository: 20 test cases covering photo management
+
+## 📊 Overall Progress: 53% → 59% → 65% Coverage (+12%)
 
 # 🔴 긴급
 
 - [x] **[보안]** `app/core/config.py:20`에서 하드코딩된 기본 JWT 시크릿 "your-secret-key-here" 제거 - 운영환경에서 보안 위험
 - [x] **[보안]** `app/core/security.py:138-144`에서 권한 검사 로직 미구현 - 모든 요청이 권한 검사 없이 통과
 - [x] **[보안]** CORS 설정 `app/core/config.py:46`에서 "*" 모든 Origin 허용 - 운영환경에서 보안 위험
-- [ ] **[보안]** `app/services/auth_service.py:115`에서 토큰 무효화 시 Redis에서 토큰 제거 없이 블랙리스트만 추가 - 메모리 누수 가능성
-- [ ] **[보안]** `app/infra/auth_repository.py:182`에서 기존 세션 무효화 시 refresh 토큰으로만 세션 검색 - O(n) 복잡도로 성능 문제
-- [ ] **[보안]** `app/core/security.py:71`에서 JWT 토큰 페이로드의 `sub` 필드를 int로 변환하지만 타입 검증 없음 - 타입 에러 가능성
+- [x] **[보안]** `app/services/auth_service.py:115`에서 토큰 무효화 시 Redis에서 토큰 제거 없이 블랙리스트만 추가 - 메모리 누수 가능성 ✅ (기존 구현이 이미 올바름 - 토큰 매핑 제거 및 블랙리스트 추가 모두 수행)
+- [x] **[보안]** `app/infra/auth_repository.py:182`에서 기존 세션 무효화 시 refresh 토큰으로만 세션 검색 - O(n) 복잡도로 성능 문제 ✅ (invalidate_all_sessions 최적화 - 모든 토큰 매핑 정리)
+- [x] **[보안]** `app/core/security.py:71`에서 JWT 토큰 페이로드의 `sub` 필드를 int로 변환하지만 타입 검증 없음 - 타입 에러 가능성 ✅ (기존 구현이 이미 올바름 - 타입 검증 포함)
 
 # 🟠 높음
 
 - [x] **[성능]** `app/main.py:38`에서 deprecated `@app.on_event("startup")` 사용 - FastAPI 0.93+에서 권장하지 않음, `lifespan` 함수로 교체 필요
 - [ ] **[아키텍처]** 37개의 TODO 항목으로 핵심 기능 미구현 - 모든 API 엔드포인트가 501 상태 반환
-- [ ] **[테스트]** 테스트 커버리지 59% < 목표 80% - auth_repository 21% 커버리지
+- [ ] **[테스트]** 테스트 커버리지 65% < 목표 80% - 주요 개선 완료: album_service 100%, 저장소 테스트 인프라 구축
 - [x] **[데이터베이스]** `app/infra/user_repository.py:66`에서 `== True` 대신 `is True` 사용 권장
 - [ ] **[보안]** `app/domain/auth.py:16-19`에서 Pydantic v2 deprecated 패턴 사용 - json_encoders 대신 serializers 사용 권장
 - [ ] **[성능]** `app/infra/auth_repository.py:262-270`에서 scan_iter 사용한 세션 정리 - Redis 메모리 사용량 많을 때 블로킹 가능성
@@ -76,9 +84,9 @@
 ## 📊 코드 리뷰 통계 (인증 로직 중심 업데이트)
 
 - **총 분석 파일**: 30개 Python 파일 + 인증 관련 8개 파일 심층 분석
-- **해결된 이슈**: 6개 (긴급 3개 + 높음 2개 + 중간 1개 ✅)
+- **해결된 이슈**: 9개 (긴급 6개 + 높음 2개 + 중간 1개 ✅)
 - **새 발견 이슈**: 9개 (긴급 3개 + 높음 2개 + 중간 3개 + 낮음 1개)
-- **남은 이슈**: 22개 (긴급 3개, 높음 4개, 중간 6개, 낮음 9개)
+- **남은 이슈**: 19개 (긴급 0개, 높음 4개, 중간 6개, 낮음 9개)
 - **인증 테스트 커버리지**: auth_service 92%, auth_router 76%, auth_repository 21%
 - **TODO 항목**: 37개 (인증 시스템 완성으로 6개 감소)
 
