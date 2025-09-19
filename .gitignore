@@ -224,6 +224,7 @@ dandle_prod.db
 .env.development
 .env.production
 .env.staging
+.env.cloud
 
 # FastAPI/Uvicorn specific
 *.pid
@@ -274,7 +275,10 @@ face_recognition.log
 # Backup files
 *.backup
 *.bak
+*.sql
 backup/
+*_backup.sql
+*backup*.sql
 
 # OS specific
 .DS_Store
