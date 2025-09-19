@@ -5,6 +5,7 @@ from app.core.config import settings
 from app.core.database import create_tables
 
 # API 라우터 import
+from app.api.auth_router import router as auth_router
 from app.api.user_router import router as user_router
 from app.api.group_router import router as group_router
 from app.api.photo_router import router as photo_router
@@ -39,6 +40,7 @@ app.add_middleware(
 )
 
 # API 라우터 등록
+app.include_router(auth_router, prefix="/api/v1")
 app.include_router(user_router, prefix="/api/v1")
 app.include_router(group_router, prefix="/api/v1")
 app.include_router(photo_router, prefix="/api/v1")

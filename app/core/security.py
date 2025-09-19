@@ -68,16 +68,25 @@ async def get_current_user(
     try:
         # 토큰에서 사용자 정보 추출
         payload = verify_token(credentials.credentials)
-        user_id: int = payload.get("sub")
-        if user_id is None:
+        user_id_raw = payload.get("sub")
+        if user_id_raw is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Could not validate credentials"
             )
 
+        # 사용자 ID 타입 검증 및 변환
+        try:
+            user_id = int(user_id_raw)
+        except (ValueError, TypeError):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid user ID in token"
+            )
+
         # 데이터베이스에서 사용자 조회
         user_repo = UserRepository(db)
-        user = user_repo.get_by_id(int(user_id))
+        user = user_repo.get_by_id(user_id)
         if user is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
