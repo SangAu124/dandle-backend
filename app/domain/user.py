@@ -16,6 +16,7 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     is_verified = Column(Boolean, default=False)
     profile_image_url = Column(String, nullable=True)
+    role = Column(String, default="user")  # 'admin', 'user'
 
     # OAuth fields
     apple_id = Column(String, unique=True, nullable=True)

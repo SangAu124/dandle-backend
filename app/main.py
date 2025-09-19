@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
@@ -10,11 +11,22 @@ from app.api.photo_router import router as photo_router
 from app.api.album_router import router as album_router
 from app.api.face_router import router as face_router
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """애플리케이션 라이프사이클 관리"""
+    # 시작 시 실행
+    create_tables()
+    yield
+    # 종료 시 실행 (필요한 경우 정리 작업)
+
+
 app = FastAPI(
     title=settings.app_name,
     description="AI 기반 자동 얼굴 인식 및 사진 정리 서비스 백엔드",
     version=settings.app_version,
-    debug=settings.debug
+    debug=settings.debug,
+    lifespan=lifespan
 )
 
 # CORS 설정
@@ -33,13 +45,6 @@ app.include_router(photo_router, prefix="/api/v1")
 app.include_router(album_router, prefix="/api/v1")
 app.include_router(face_router, prefix="/api/v1")
 
-
-# 애플리케이션 시작 이벤트
-@app.on_event("startup")
-async def startup_event():
-    """애플리케이션 시작 시 실행"""
-    # 데이터베이스 테이블 생성
-    create_tables()
 
 
 @app.get("/")

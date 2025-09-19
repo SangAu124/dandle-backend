@@ -135,13 +135,21 @@ class PermissionChecker:
         self.required_permission = required_permission
 
     def __call__(self, current_user = Depends(get_current_active_user)):
-        # TODO: 사용자 권한 시스템 구현 후 권한 검사 로직 추가
-        # if not self.has_permission(current_user, self.required_permission):
-        #     raise HTTPException(
-        #         status_code=status.HTTP_403_FORBIDDEN,
-        #         detail="Insufficient permissions"
-        #     )
+        """사용자 권한 검사"""
+        if not self._has_permission(current_user, self.required_permission):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Insufficient permissions"
+            )
         return current_user
+
+    def _has_permission(self, user, required_permission: str) -> bool:
+        """사용자가 필요한 권한을 가지고 있는지 확인"""
+        if required_permission == "admin":
+            return user.role == "admin"
+        elif required_permission == "user":
+            return user.role in ["user", "admin"]  # admin은 user 권한도 포함
+        return False
 
 
 # 권한 체커 인스턴스들

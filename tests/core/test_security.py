@@ -266,12 +266,22 @@ class TestPermissionChecker:
         assert checker.required_permission == "admin"
 
     def test_permission_checker_call(self):
-        """PermissionChecker 호출 (현재는 단순히 사용자 반환)"""
+        """PermissionChecker 호출 - 권한 검사 테스트"""
+        # 관리자 권한 테스트
         checker = PermissionChecker("admin")
-        mock_user = Mock(spec=User)
+        mock_admin_user = Mock(spec=User)
+        mock_admin_user.role = "admin"
 
-        result = checker(mock_user)
-        assert result == mock_user
+        result = checker(mock_admin_user)
+        assert result == mock_admin_user
+
+        # 일반 사용자가 관리자 권한 요청 시 거부
+        mock_user = Mock(spec=User)
+        mock_user.role = "user"
+
+        with pytest.raises(HTTPException) as exc_info:
+            checker(mock_user)
+        assert exc_info.value.status_code == 403
 
     def test_require_admin_instance(self):
         """require_admin 인스턴스 테스트"""

@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     redis_url: str = "redis://localhost:6379/0"
 
     # JWT 설정
-    jwt_secret: str = "your-secret-key-here"
+    jwt_secret: str  # 환경 변수에서 필수로 설정해야 함
     jwt_algorithm: str = "HS256"
     jwt_expire_minutes: int = 60 * 24 * 7  # 7일
 
@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     smtp_password: Optional[str] = None
 
     # CORS 설정
-    cors_origins: list = ["*"]  # 프로덕션에서는 구체적인 도메인으로 제한
+    cors_origins: list = ["http://localhost:3000", "http://localhost:8080"]  # 개발환경용, 운영환경에서는 실제 도메인으로 설정
 
     # 파일 업로드 설정
     max_file_size: int = 50 * 1024 * 1024  # 50MB

@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
+from app.core.security import get_current_active_user
+from app.domain.user import User
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -44,13 +46,9 @@ async def create_user(user_data: UserCreate):
 
 
 @router.get("/me", response_model=UserResponse)
-async def get_current_user():
+async def get_current_user_info(current_user: User = Depends(get_current_active_user)):
     """현재 로그인된 사용자 정보 조회"""
-    # TODO: JWT 토큰을 통한 현재 사용자 조회
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Get current user not implemented yet"
-    )
+    return current_user
 
 
 @router.get("/{user_id}", response_model=UserResponse)

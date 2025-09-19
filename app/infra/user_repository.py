@@ -63,7 +63,7 @@ class UserRepository:
         """활성 사용자 목록 조회"""
         return (
             self.db.query(User)
-            .filter(User.is_active == True)
+            .filter(User.is_active.is_(True))
             .offset(skip)
             .limit(limit)
             .all()
